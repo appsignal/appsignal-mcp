@@ -1,6 +1,5 @@
 # AppSignal MCP Server
 
-
 Proof of concept, don't use this in production, or anywhere, really.
 
 ## Installation
@@ -30,4 +29,12 @@ Add appsignal as an mcpServer: `zed  ~/Library/Application\ Support/Claude/claud
     }
   }
 }
+```
+
+## Debugging
+
+Tail the logs:
+
+```
+tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
 ```

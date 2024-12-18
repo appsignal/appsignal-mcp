@@ -41,6 +41,7 @@ const server = new Server(
 
 // List available tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
+  console.error("Getting schema");
   const response = await client.get<ListToolsResult>("/schema");
   return response.data;
 });
@@ -48,7 +49,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 // Handle tool execution
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
-  console.log(`Calling tool ${name} with args:`, args);
+  console.error(`Calling tool ${name} with args:`, args);
   const response = await client.post<ListToolsResult>("/tool", request.params);
   return response.data;
 });

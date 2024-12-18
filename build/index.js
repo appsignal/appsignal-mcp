@@ -9,7 +9,7 @@ const API_KEY = process.env.APPSIGNAL_API_KEY;
 if (!API_KEY) {
     throw new Error("APPSIGNAL_API_KEY environment variable is required");
 }
-const ENDPOINT = process.env.APPSIGNAL_ENDPOINT || "http://localhost:5000/api/mcp";
+const ENDPOINT = process.env.APPSIGNAL_ENDPOINT || "https://appsignal.com/api/mcp";
 const client = axios.create({
     baseURL: ENDPOINT,
     headers: {
@@ -27,13 +27,14 @@ const server = new Server({
 });
 // List available tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
+    console.error("Getting schema");
     const response = await client.get("/schema");
     return response.data;
 });
 // Handle tool execution
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
     const { name, arguments: args } = request.params;
-    console.log(`Calling tool ${name} with args:`, args);
+    console.error(`Calling tool ${name} with args:`, args);
     const response = await client.post("/tool", request.params);
     return response.data;
 });
