@@ -8,7 +8,11 @@ import {
   GetPromptRequestSchema,
   ListToolsResult,
   ListPromptsResult,
+  ListResourcesResult,
+  ReadResourceResult,
   ListPromptsRequestSchema,
+  ListResourcesRequestSchema,
+  ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import dotenv from "dotenv";
 import axios, { AxiosInstance } from "axios";
@@ -38,9 +42,24 @@ const server = new Server(
     capabilities: {
       tools: {},
       prompts: {},
+      resources: {},
     },
   },
 );
+
+// List available tools
+server.setRequestHandler(ListResourcesRequestSchema, async () => {
+  console.error("Getting resources");
+  const response = await client.get<ListResourcesResult>("/resources");
+  return response.data;
+});
+
+// Handle tool execution
+server.setRequestHandler(ReadResourceRequestSchema, async (method) => {
+  console.error(`Calling tool ${JSON.stringify(method)} with args:`);
+  const response = await client.post<ReadResourceResult>("/resource", method);
+  return response.data;
+});
 
 // List available tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {

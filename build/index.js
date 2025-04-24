@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { CallToolRequestSchema, ListToolsRequestSchema, GetPromptRequestSchema, ListPromptsRequestSchema, } from "@modelcontextprotocol/sdk/types.js";
+import { CallToolRequestSchema, ListToolsRequestSchema, GetPromptRequestSchema, ListPromptsRequestSchema, ListResourcesRequestSchema, ReadResourceRequestSchema, } from "@modelcontextprotocol/sdk/types.js";
 import dotenv from "dotenv";
 import axios from "axios";
 dotenv.config();
@@ -24,7 +24,20 @@ const server = new Server({
     capabilities: {
         tools: {},
         prompts: {},
+        resources: {},
     },
+});
+// List available tools
+server.setRequestHandler(ListResourcesRequestSchema, async () => {
+    console.error("Getting resources");
+    const response = await client.get("/resources");
+    return response.data;
+});
+// Handle tool execution
+server.setRequestHandler(ReadResourceRequestSchema, async (method) => {
+    console.error(`Calling tool ${JSON.stringify(method)} with args:`);
+    const response = await client.post("/resource", method);
+    return response.data;
 });
 // List available tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
@@ -39,7 +52,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     const response = await client.post("/tool", request.params);
     return response.data;
 });
-// Handle prompt execution
+// List available prompts
 server.setRequestHandler(GetPromptRequestSchema, async (request) => {
     const { name, arguments: args } = request.params;
     console.error(`Calling prompt ${name} with args:`, args);
