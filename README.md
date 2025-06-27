@@ -11,6 +11,12 @@ Join our  [Discord community][discord] to help test and shape this MCP implement
 
 ## Installation
 
+Pull the Docker image:
+
+```
+docker pull appsignal/appsignal-mcp:latest
+```
+
 1. Clone this repository:
    ```bash
    git clone https://github.com/appsignal/appsignal-mcp.git
@@ -37,13 +43,44 @@ Configure Claude to use the MCP server by editing `~/Library/Application Support
 {
   "mcpServers": {
     "appsignal": {
-      "command": "node",
+      "command": "docker",
       "args": [
-        "/path/to/appsignal-mcp/build/index.js"
+          "run",
+          "-i",
+          "--rm",
+          "-e",
+          "APPSIGNAL_API_KEY",
+          "appsignal/appsignal-mcp"
       ],
       "env": {
         "APPSIGNAL_API_KEY": "your_api_key_here"
       }
+    }
+  }
+}
+```
+
+### Zed
+
+```json
+{
+  "context_servers": {
+    "appsignal": {
+      "command": {
+        "path": "docker",
+        "args": [
+          "run",
+          "-i",
+          "--rm",
+          "-e",
+          "APPSIGNAL_API_KEY",
+           "appsignal/appsignal-mcp"
+        ],
+        "env": {
+          "APPSIGNAL_API_KEY": "your_api_key_here"
+        }
+      },
+      "settings": {}
     }
   }
 }
