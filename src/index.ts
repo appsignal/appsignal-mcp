@@ -17,7 +17,7 @@ import {
 import dotenv from "dotenv";
 import axios, { AxiosInstance } from "axios";
 
-dotenv.config();
+dotenv.config({ debug: false });
 
 const API_KEY = process.env.APPSIGNAL_API_KEY;
 if (!API_KEY) {
@@ -49,7 +49,6 @@ const server = new Server(
 
 // List available tools
 server.setRequestHandler(ListResourcesRequestSchema, async () => {
-  console.error("Getting resources");
   const response = await client.get<ListResourcesResult>("/resources");
   return response.data;
 });
@@ -93,7 +92,6 @@ server.setRequestHandler(ListPromptsRequestSchema, async (request) => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.log("AppSignal MCP Server running on stdio");
 }
 
 main().catch((error) => {
