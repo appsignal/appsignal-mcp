@@ -6,7 +6,7 @@ Join our  [Discord community][discord] to help test and shape this MCP implement
 
 ## Prerequisites
 
-- Node.js 18.x or higher
+- Docker
 - An [AppSignal account][appsignal-sign-up] with API access
 
 ## Installation
