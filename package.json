@@ -1,7 +1,10 @@
 {
   "name": "appsignal-mcp",
+  "author": "AppSignal",
   "version": "1.0.0",
-  "description": "",
+  "description": "The official AppSignal MCP server",
+  "homepage": "https://appsignal.com",
+  "license": "MIT",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -18,9 +21,15 @@
   "files": [
     "build"
   ],
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "appsignal",
+    "mcp",
+    "server"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appsignal/appsignal-mcp.git"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.1",
     "axios": "^1.6.2",

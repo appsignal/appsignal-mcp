@@ -56,14 +56,12 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
 
 // Handle tool execution
 server.setRequestHandler(ReadResourceRequestSchema, async (method) => {
-  console.error(`Calling tool ${JSON.stringify(method)} with args:`);
   const response = await client.post<ReadResourceResult>("/resource", method);
   return response.data;
 });
 
 // List available tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
-  console.error("Getting tools");
   const response = await client.get<ListToolsResult>("/tools");
   return response.data;
 });
@@ -71,7 +69,6 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 // Handle tool execution
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
-  console.error(`Calling tool ${name} with args:`, args);
   const response = await client.post<ListToolsResult>("/tool", request.params);
   return response.data;
 });
@@ -79,7 +76,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 // List available prompts
 server.setRequestHandler(GetPromptRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
-  console.error(`Calling prompt ${name} with args:`, args);
   const response = await client.post<ListToolsResult>(
     "/prompt",
     request.params,
@@ -89,7 +85,6 @@ server.setRequestHandler(GetPromptRequestSchema, async (request) => {
 
 // Handle prompt execution
 server.setRequestHandler(ListPromptsRequestSchema, async (request) => {
-  console.error(`Getting prompts: ${JSON.stringify(request.params)}`);
   const response = await client.get<ListPromptsResult>("/prompts");
   return response.data;
 });
@@ -98,7 +93,7 @@ server.setRequestHandler(ListPromptsRequestSchema, async (request) => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("AppSignal MCP Server running on stdio");
+  console.log("AppSignal MCP Server running on stdio");
 }
 
 main().catch((error) => {
