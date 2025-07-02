@@ -49,7 +49,6 @@ const server = new Server(
 
 // List available tools
 server.setRequestHandler(ListResourcesRequestSchema, async () => {
-  console.error("Getting resources");
   const response = await client.get<ListResourcesResult>("/resources");
   return response.data;
 });
