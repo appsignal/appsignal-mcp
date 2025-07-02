@@ -17,7 +17,7 @@ import {
 import dotenv from "dotenv";
 import axios, { AxiosInstance } from "axios";
 
-dotenv.config({ debug: false });
+dotenv.config({ quiet: true });
 
 const API_KEY = process.env.APPSIGNAL_API_KEY;
 if (!API_KEY) {
@@ -92,6 +92,8 @@ server.setRequestHandler(ListPromptsRequestSchema, async (request) => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
+  // Use console.error for logging since stdout is reserved for MCP communication
+  console.error("AppSignal MCP Server running on stdio");
 }
 
 main().catch((error) => {
