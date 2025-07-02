@@ -14,13 +14,13 @@ Join our  [Discord community][discord] to help test and shape this MCP implement
 Pull the Docker image:
 
 ```
-docker pull appsignal/appsignal-mcp:latest
+docker pull appsignal/mcp:latest
 ```
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/appsignal/appsignal-mcp.git
-   cd appsignal-mcp
+   git clone https://github.com/appsignal/mcp.git
+   cd mcp
    ```
 
 2. Install dependencies:
@@ -50,7 +50,7 @@ Configure Claude to use the MCP server by editing `~/Library/Application Support
           "--rm",
           "-e",
           "APPSIGNAL_API_KEY",
-          "appsignal/appsignal-mcp"
+          "appsignal/mcp"
       ],
       "env": {
         "APPSIGNAL_API_KEY": "your_api_key_here"
@@ -74,7 +74,7 @@ Configure Claude to use the MCP server by editing `~/Library/Application Support
           "--rm",
           "-e",
           "APPSIGNAL_API_KEY",
-           "appsignal/appsignal-mcp"
+           "appsignal/mcp"
         ],
         "env": {
           "APPSIGNAL_API_KEY": "your_api_key_here"

@@ -28,7 +28,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/appsignal/appsignal-mcp.git"
+    "url": "git+https://github.com/appsignal/mcp.git"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.13.2",
