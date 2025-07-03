@@ -35,9 +35,10 @@ docker pull appsignal/mcp:latest
 
 ## Configuration examples
 
-#### Claude
+### Claude
 
 Configure Claude to use the MCP server by editing `~/Library/Application Support/Claude/claude_desktop_config.json`:
+(See below for Claude _code_)
 
 ```json
 {
@@ -58,6 +59,12 @@ Configure Claude to use the MCP server by editing `~/Library/Application Support
     }
   }
 }
+```
+
+### Claude code
+
+```
+claude mcp add appsignal -e APPSIGNAL_API_KEY=your_api_key_here -e  -- docker run -i --rm -e APPSIGNAL_API_KEY appsignal/mcp
 ```
 
 ### Zed
