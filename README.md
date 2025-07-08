@@ -64,7 +64,7 @@ Configure Claude to use the MCP server by editing `~/Library/Application Support
 ### Claude code
 
 ```
-claude mcp add appsignal -e APPSIGNAL_API_KEY=your_api_key_here -e  -- docker run -i --rm -e APPSIGNAL_API_KEY appsignal/mcp
+claude mcp add appsignal -e APPSIGNAL_API_KEY=your_api_key_here -- docker run -i --rm -e APPSIGNAL_API_KEY appsignal/mcp
 ```
 
 ### Zed
