@@ -17,22 +17,6 @@ Pull the Docker image:
 docker pull appsignal/mcp:latest
 ```
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/appsignal/mcp.git
-   cd mcp
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Build the project:
-   ```bash
-   npm run build
-   ```
-
 ## Configuration examples
 
 ### Claude
