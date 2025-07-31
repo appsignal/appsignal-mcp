@@ -2,7 +2,7 @@
 
 This is the official AppSignal [MCP][mcp] server. It allows AI agents to access AppSignal's monitoring data, metrics, and tools and is currently in beta.
 
-Join our  [Discord community][discord] to help test and shape this MCP implementation.
+Join our [Discord community][discord] to help test and shape this MCP implementation.
 
 ## Prerequisites
 
@@ -29,14 +29,7 @@ Configure Claude to use the MCP server by editing `~/Library/Application Support
   "mcpServers": {
     "appsignal": {
       "command": "docker",
-      "args": [
-          "run",
-          "-i",
-          "--rm",
-          "-e",
-          "APPSIGNAL_API_KEY",
-          "appsignal/mcp"
-      ],
+      "args": ["run", "-i", "--rm", "-e", "APPSIGNAL_API_KEY", "appsignal/mcp"],
       "env": {
         "APPSIGNAL_API_KEY": "your_api_key_here"
       }
@@ -65,7 +58,7 @@ claude mcp add appsignal -e APPSIGNAL_API_KEY=your_api_key_here -- docker run -i
           "--rm",
           "-e",
           "APPSIGNAL_API_KEY",
-           "appsignal/mcp"
+          "appsignal/mcp"
         ],
         "env": {
           "APPSIGNAL_API_KEY": "your_api_key_here"
@@ -77,16 +70,55 @@ claude mcp add appsignal -e APPSIGNAL_API_KEY=your_api_key_here -- docker run -i
 }
 ```
 
+### VSCode
+
+If you are running GitHub Copilot, and are signed in under a company account, make sure to set "MCP servers in Copilot" to "Enabled" under your organization settings > Copilot > Policies.
+
+![GitHub Copilot Settings](public/assets/images/github-copilot-settings.png)
+
+Then add this config to your `.vscode/mcp.json` settings:
+
+```json
+{
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "appsignal_mcp_token",
+      "description": "AppSignal MCP Token",
+      "password": true
+    }
+  ],
+  "servers": {
+    "appsignal": {
+      "command":  "docker"
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "APPSIGNAL_API_KEY",
+        "appsignal/mcp"
+      ],
+      "env": {
+        "APPSIGNAL_API_KEY": "${input:appsignal_mcp_token}"
+      }
+    }
+  }
+}
+```
+
 ## Development
 
 To work on the MCP server:
 
 1. Start the TypeScript compiler in watch mode:
+
    ```bash
    npm run watch
    ```
 
 2. Run tests:
+
    ```bash
    npm test
    ```
