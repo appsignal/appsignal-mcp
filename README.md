@@ -7,7 +7,7 @@ Join our [Discord community][discord] to help test and shape this MCP implementa
 ## Prerequisites
 
 - Docker
-- An [AppSignal account][appsignal-sign-up] with API access
+- An [AppSignal account][appsignal-sign-up] and an [AppSignal MCP token][appsignal-mcp-token].
 
 ## Installation
 
@@ -17,12 +17,11 @@ Pull the Docker image:
 docker pull appsignal/mcp:latest
 ```
 
-## Configuration examples
+## Configuration
 
 ### Claude
 
-Configure Claude to use the MCP server by editing `~/Library/Application Support/Claude/claude_desktop_config.json`:
-(See below for Claude _code_)
+Configure Claude to use the AppSignal MCP server by editing the `~/Library/Application Support/Claude/claude_desktop_config.json` file:
 
 ```json
 {
@@ -40,11 +39,39 @@ Configure Claude to use the MCP server by editing `~/Library/Application Support
 
 ### Claude code
 
+To enable AppSignal MCP in Claude Code, run the following command:
+
 ```
 claude mcp add appsignal -e APPSIGNAL_API_KEY=your_api_key_here -- docker run -i --rm -e APPSIGNAL_API_KEY appsignal/mcp
 ```
 
+### Cursor and Windsurf
+
+To enable AppSignal MCP in Cursor or Windsurf, edit your configuration file.
+
+For Cursor use `~/.cursor/mcp.json`
+
+For Windsurf use `~/.codeium/windsurf/mcp_config.json`
+
+Add the following configuration:
+
+```json
+{
+  "mcpServers": {
+    "appsignal": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "-e", "APPSIGNAL_API_KEY", "appsignal/mcp"],
+      "env": {
+        "APPSIGNAL_API_KEY": "your-mcp-token"
+      }
+    }
+  }
+}
+```
+
 ### Zed
+
+Open your Zed settings file and add the `context_servers` section:
 
 ```json
 {
@@ -154,6 +181,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 [mcp]: https://github.com/anthropics/anthropic-tools/blob/main/model-context-protocol.md
 [appsignal]: https://www.appsignal.com
 [appsignal-sign-up]: https://appsignal.com/users/sign_up
+[appsignal-mcp-token]: https://appsignal.com/users/mcp_tokens
 [contact]: mailto:support@appsignal.com
 [coc]: https://docs.appsignal.com/appsignal/code-of-conduct.html
 [waffles-page]: https://www.appsignal.com/waffles
