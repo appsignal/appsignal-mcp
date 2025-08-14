@@ -77,23 +77,13 @@ Open your Zed settings file and add the `context_servers` section:
 {
   "context_servers": {
     "appsignal": {
-      "command": {
-        "path": "docker",
-        "args": [
-          "run",
-          "-i",
-          "--rm",
-          "-e",
-          "APPSIGNAL_API_KEY",
-          "appsignal/mcp"
-        ],
-        "env": {
-          "APPSIGNAL_API_KEY": "your_api_key_here"
-        }
-      },
-      "settings": {}
+      "source": "custom",
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "-e", "APPSIGNAL_API_KEY", "appsignal/mcp"],
+      "env": {
+        "APPSIGNAL_API_KEY": "your-mcp-token"
+      }
     }
-  }
 }
 ```
 
