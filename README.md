@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/appsignal-appsignal-mcp-badge.png)](https://mseep.ai/app/appsignal-appsignal-mcp)
+
 # AppSignal MCP Server [beta]
 
 This is the official AppSignal [MCP][mcp] server. It allows AI agents to access AppSignal's monitoring data, metrics, and tools and is currently in beta.
