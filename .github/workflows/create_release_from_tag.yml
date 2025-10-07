@@ -19,7 +19,7 @@ jobs:
       CHANGELOG_LINK: "https://github.com/appsignal/appsignal-mcp/blob/main/CHANGELOG.md"
     steps:
       - name: Checkout repository at tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: "${{ github.ref }}"
 
@@ -60,3 +60,11 @@ jobs:
             --fail-with-body \
             https://api.github.com/repos/appsignal/appsignal.com/actions/workflows/102125282/dispatches \
             -d "$payload"
+
+      - name: Create release
+        run: |
+          gh release create "${{ env.TAG_NAME }}" \
+            --title "${{ env.TAG_NAME }}" \
+            --notes-file CHANGELOG_TEXT.txt
+        env:
+          GH_TOKEN: ${{ github.token }}
