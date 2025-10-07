@@ -145,6 +145,29 @@ To work on the MCP server:
    npm run inspector
    ```
 
+### Change management
+
+Every change that will results in a new version to be released, requires a changeset.
+Changesets are small Markdown file that describe the change for the end-user.
+The changeset's frontmatter describes the type of change (new feature, bug fix, etc.) and the version bump (major, minor, or patch).
+
+Use [Mono's changeset CLI](https://github.com/appsignal/mono/?tab=readme-ov-file#changeset-add) to generate a new changeset file.
+Commit the changeset file and include it in your Pull Requests.
+
+```
+mono changeset add
+```
+
+### Publishing
+
+Install [Mono](https://github.com/appsignal/mono/), the tool used for release management.
+
+```
+git pull # Ensure you have the latest version
+
+mono publish # Publish a new version
+```
+
 ## Contributing
 
 Thinking of contributing to our project? Awesome! 🚀
