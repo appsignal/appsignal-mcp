@@ -1,5 +1,5 @@
 {
-  "name": "appsignal-mcp",
+  "name": "@appsignal/mcp",
   "author": "AppSignal",
   "version": "0.1.0",
   "description": "The official AppSignal MCP server",
