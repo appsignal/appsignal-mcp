@@ -1,0 +1,6 @@
+---
+language: nodejs
+repo: "https://github.com/appsignal/appsignal-mcp"
+npm_client: "npm"
+git-commit:
+  pre: "npm install"
