@@ -19,7 +19,7 @@ jobs:
       CHANGELOG_LINK: "https://github.com/appsignal/appsignal-mcp/blob/main/CHANGELOG.md"
     steps:
       - name: Checkout repository at tag
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: "${{ github.ref }}"
 
