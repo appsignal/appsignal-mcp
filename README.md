@@ -44,7 +44,13 @@ Configure Claude to use the AppSignal MCP server by editing the `~/Library/Appli
 }
 ```
 
-### Claude code
+You can find this by navigating to your Profile -> Settings -> Developer and then clicking `Edit Config`
+
+
+<img width="1416" height="546" alt="image" src="https://github.com/user-attachments/assets/d38e0b19-01b2-4b1d-82ba-e2ec1f8fde6f" />
+
+
+### Claude Code
 
 To enable AppSignal MCP in Claude Code, run the following command:
 
