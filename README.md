@@ -1,8 +1,15 @@
-# AppSignal MCP Server [beta]
+# AppSignal MCP Server
 
-This is the official AppSignal [MCP][mcp] server. It allows AI agents to access AppSignal's monitoring data, metrics, and tools and is currently in beta.
+This is the official [AppSignal](https://www.appsignal.com/tour/mcp-server) [MCP][mcp] server. Everything necessary to debug using AppSignal's monitoring data, metrics, and tools is now accessible from your favorite AI editor. 
 
-Join our [Discord community][discord] to help test and shape this MCP implementation.
+
+<img width="1067" height="600" alt="mcp server" src="https://github.com/user-attachments/assets/bfc4a9d2-fd78-4111-8e91-78b441ea10ce" />
+
+
+
+This feature is in *Beta*. Documentation can also be found [here](https://docs.appsignal.com/mcp) 
+
+Join our [Discord community][discord] to help shape this MCP implementation. Feature requests are welcome! 
 
 ## Prerequisites
 
