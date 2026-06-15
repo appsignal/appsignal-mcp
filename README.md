@@ -7,7 +7,7 @@ This is the official [AppSignal](https://www.appsignal.com/tour/mcp-server) [MCP
 
 
 
-This feature is in *Beta*. Documentation can also be found [here](https://docs.appsignal.com/mcp) 
+This feature is in *Beta*. Documentation can also be found [here](https://docs.appsignal.com/mcp-server) 
 
 Join our [Discord community][discord] to help shape this MCP implementation. Feature requests are welcome! 
 
