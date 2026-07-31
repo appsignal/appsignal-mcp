@@ -1,3 +1,3 @@
 # Code of Conduct
 
-Please visit [docs.appsignal.com/appsignal/code-of-conduct.html](https://docs.appsignal.com/appsignal/code-of-conduct.html) for our Code of Conduct for this project.
+Please visit [docs.appsignal.com/appsignal/contributing/code-of-conduct](https://docs.appsignal.com/appsignal/contributing/code-of-conduct) for our Code of Conduct for this project.
