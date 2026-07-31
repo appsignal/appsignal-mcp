@@ -1,15 +1,16 @@
 # AppSignal MCP Server
 
-This is the official [AppSignal](https://www.appsignal.com/tour/mcp-server) [MCP][mcp] server. Everything necessary to debug using AppSignal's monitoring data, metrics, and tools is now accessible from your favorite AI editor. 
+This is the official [AppSignal](https://www.appsignal.com/tour/mcp-server) [MCP][mcp] server. Everything necessary to debug using AppSignal's monitoring data, metrics, and tools is now accessible from your favorite AI editor.
 
 
 <img width="1067" height="600" alt="mcp server" src="https://github.com/user-attachments/assets/bfc4a9d2-fd78-4111-8e91-78b441ea10ce" />
 
 
+AppSignal MCP is a public HTTP endpoint at `https://appsignal.com/api/mcp`. Most agents connect to it directly — **you don't need this repository to use AppSignal MCP**. It holds the optional Docker image that proxies the endpoint over stdio, for environments that restrict outbound traffic or agents that can't speak HTTP MCP.
 
-This feature is in *Beta*. Documentation can also be found [here](https://docs.appsignal.com/mcp-server) 
+This feature is in *preview*. Read the full MCP reference on [AppSignal official documentation](https://docs.appsignal.com/mcp-server).
 
-Join our [Discord community][discord] to help shape this MCP implementation. Feature requests are welcome! 
+Join our [Discord community][discord] to help shape this MCP implementation. Feature requests are welcome!
 
 ## Prerequisites
 
@@ -24,11 +25,39 @@ Pull the Docker image:
 docker pull appsignal/mcp:latest
 ```
 
+The image reads two environment variables: `APPSIGNAL_API_KEY` (required, your MCP token) and `APPSIGNAL_ENDPOINT` (optional, defaults to `https://appsignal.com/api/mcp`).
+
 ## Configuration
 
-### Claude
+Each editor below shows two options: the HTTP endpoint, which authenticates with OAuth, and the Docker image, which authenticates with your [MCP token][appsignal-mcp-token]. To use a token over HTTP instead of OAuth, add an `Authorization: Bearer <YOUR_MCP_TOKEN>` header — see the [setup guide][docs-setup] for the exact form per editor.
 
-Configure Claude to use the AppSignal MCP server by editing the `~/Library/Application Support/Claude/claude_desktop_config.json` file:
+### Claude Code
+
+```bash
+claude mcp add --transport http appsignal https://appsignal.com/api/mcp
+```
+
+Claude Code starts the browser sign-in the first time an AppSignal tool is used. Run `claude mcp list` to confirm it shows as connected.
+
+With Docker:
+
+```bash
+claude mcp add appsignal -e APPSIGNAL_API_KEY=your-mcp-token -- docker run -i --rm -e APPSIGNAL_API_KEY appsignal/mcp
+```
+
+### Claude app
+
+Claude.ai, and the desktop and mobile apps, connect over OAuth as a custom connector. There's no Bearer token option here.
+
+1. Open **Settings**, then **Connectors**.
+2. Select **Browse**, search for `appsignal`, and open the AppSignal connector. If it isn't listed, select **Add custom connector** and enter `https://appsignal.com/api/mcp`.
+3. Select **Connect** and complete the AppSignal sign-in.
+
+To run the Docker proxy locally instead, open **Settings → Developer → Local MCP servers** and select **Edit Config**.
+
+<img width="1416" height="546" alt="image" src="https://github.com/user-attachments/assets/d38e0b19-01b2-4b1d-82ba-e2ec1f8fde6f" />
+
+Then add this configuration to the file that opens:
 
 ```json
 {
@@ -37,25 +66,11 @@ Configure Claude to use the AppSignal MCP server by editing the `~/Library/Appli
       "command": "docker",
       "args": ["run", "-i", "--rm", "-e", "APPSIGNAL_API_KEY", "appsignal/mcp"],
       "env": {
-        "APPSIGNAL_API_KEY": "your_api_key_here"
+        "APPSIGNAL_API_KEY": "your-mcp-token"
       }
     }
   }
 }
-```
-
-You can find this by navigating to your Profile -> Settings -> Developer and then clicking `Edit Config`
-
-
-<img width="1416" height="546" alt="image" src="https://github.com/user-attachments/assets/d38e0b19-01b2-4b1d-82ba-e2ec1f8fde6f" />
-
-
-### Claude Code
-
-To enable AppSignal MCP in Claude Code, run the following command:
-
-```
-claude mcp add appsignal -e APPSIGNAL_API_KEY=your_api_key_here -- docker run -i --rm -e APPSIGNAL_API_KEY appsignal/mcp
 ```
 
 ### Cursor and Windsurf
@@ -97,14 +112,15 @@ Open your Zed settings file and add the `context_servers` section:
         "APPSIGNAL_API_KEY": "your-mcp-token"
       }
     }
+  }
 }
 ```
 
-### VSCode
+### VS Code
 
-If you are running GitHub Copilot, and are signed in under a company account, make sure to set "MCP servers in Copilot" to "Enabled" under your organization settings > Copilot > Policies.
+If you use GitHub Copilot under a company account, set **MCP servers in Copilot** to **Enabled** in your organization settings (Settings → Copilot → Policies → Features).
 
-![GitHub Copilot Settings](public/assets/images/github-copilot-settings.png)
+![GitHub Copilot settings](public/assets/images/github-copilot-settings.png)
 
 Then add this config to your `.vscode/mcp.json` settings:
 
@@ -120,7 +136,7 @@ Then add this config to your `.vscode/mcp.json` settings:
   ],
   "servers": {
     "appsignal": {
-      "command":  "docker"
+      "command": "docker",
       "args": [
         "run",
         "-i",
@@ -136,6 +152,16 @@ Then add this config to your `.vscode/mcp.json` settings:
   }
 }
 ```
+
+### Other agents
+
+GitHub Copilot CLI, Gemini CLI, and OpenAI Codex are covered in the [setup guide][docs-setup].
+
+## What you can access
+
+The endpoint exposes read and write tools across seven areas: error incidents, performance, anomaly detection, logging, metrics, dashboards, and app discovery. With an MCP token, each area can be set to `read`, `write`, or disabled. With OAuth, all read and write tools are exposed at once.
+
+For the full list of tools, parameters, and example prompts, see the [MCP tool reference][docs-reference].
 
 ## Development
 
@@ -204,12 +230,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 [AppSignal][appsignal] provides real-time performance monitoring for your web applications. Track errors, monitor performance, measure client-side metrics, and receive alerts when things go wrong.
 
-[mcp]: https://github.com/anthropics/anthropic-tools/blob/main/model-context-protocol.md
+[mcp]: https://modelcontextprotocol.io/introduction
+[docs-setup]: https://docs.appsignal.com/mcp/setup
+[docs-reference]: https://docs.appsignal.com/mcp/reference
 [appsignal]: https://www.appsignal.com
 [appsignal-sign-up]: https://appsignal.com/users/sign_up
 [appsignal-mcp-token]: https://appsignal.com/users/mcp_tokens
 [contact]: mailto:support@appsignal.com
-[coc]: https://docs.appsignal.com/appsignal/code-of-conduct.html
+[coc]: https://docs.appsignal.com/appsignal/contributing/code-of-conduct
 [waffles-page]: https://www.appsignal.com/waffles
-[contributing-guide]: https://docs.appsignal.com/appsignal/contributing.html
+[contributing-guide]: https://docs.appsignal.com/appsignal/contributing
 [discord]: https://discord.gg/fT2cbMuQSJ
