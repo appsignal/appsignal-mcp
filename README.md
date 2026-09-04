@@ -11,7 +11,7 @@ AppSignal MCP is a public HTTP endpoint at `https://appsignal.com/api/mcp`. Conn
 > [!IMPORTANT]
 > This repository holds a legacy stdio proxy, published as the `appsignal/mcp` Docker image and the `@appsignal/mcp` npm package. It still works, but it is no longer the recommended way to connect and we do not plan to develop it further. Connect to `https://appsignal.com/api/mcp` instead. See [Legacy stdio proxy](#legacy-stdio-proxy) if your setup needs it.
 
-This feature is in *preview*. Read the full MCP reference on the [AppSignal official documentation](https://docs.appsignal.com/mcp-server).
+Read the full MCP reference on the [AppSignal official documentation](https://docs.appsignal.com/mcp-server).
 
 Join our [Discord community][discord] to help shape this MCP implementation. Feature requests are welcome!
 
