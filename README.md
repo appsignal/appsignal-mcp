@@ -1,23 +1,53 @@
 # AppSignal MCP Server
 
-This is the official [AppSignal](https://www.appsignal.com/tour/mcp-server) [MCP][mcp] server. Everything necessary to debug using AppSignal's monitoring data, metrics, and tools is now accessible from your favorite AI editor.
+This is the official [AppSignal](https://www.appsignal.com/tour/mcp-server) [MCP][mcp] server. AppSignal MCP gives your AI editor direct access to your monitoring data: errors, traces, logs, metrics, and dashboards.
 
 
-<img width="1067" height="600" alt="mcp server" src="https://github.com/user-attachments/assets/bfc4a9d2-fd78-4111-8e91-78b441ea10ce" />
+<img width="1067" height="600" alt="AppSignal MCP server answering a question in an AI editor" src="https://github.com/user-attachments/assets/bfc4a9d2-fd78-4111-8e91-78b441ea10ce" />
 
 
-AppSignal MCP is a public HTTP endpoint at `https://appsignal.com/api/mcp`. Most agents connect to it directly — **you don't need this repository to use AppSignal MCP**. It holds the optional Docker image that proxies the endpoint over stdio, for environments that restrict outbound traffic or agents that can't speak HTTP MCP.
+AppSignal MCP is a public HTTP endpoint at `https://appsignal.com/api/mcp`. Connect your agent to that endpoint directly. **You don't need this repository to use AppSignal MCP.**
 
-This feature is in *preview*. Read the full MCP reference on [AppSignal official documentation](https://docs.appsignal.com/mcp-server).
+> [!IMPORTANT]
+> **This repo is unmaintained. Please use the [AppSignal MCP endpoint directly](https://docs.appsignal.com/mcp-server).**
+> This repository holds a legacy stdio proxy, published as the `appsignal/mcp` Docker image and the `@appsignal/mcp` npm package. It still works, but it is no longer the recommended way to connect and we do not plan to develop it further. Connect to `https://appsignal.com/api/mcp` instead. See [Legacy stdio proxy](#legacy-stdio-proxy) if your setup needs it.
+
+Read the full MCP reference on the [AppSignal official documentation](https://docs.appsignal.com/mcp-server).
 
 Join our [Discord community][discord] to help shape this MCP implementation. Feature requests are welcome!
 
-## Prerequisites
+## Connect to AppSignal MCP
+
+The endpoint authenticates with OAuth, so there is no server to install or run. In Claude Code:
+
+```bash
+claude mcp add --transport http appsignal https://appsignal.com/api/mcp
+```
+
+Claude Code starts the browser sign-in the first time an AppSignal tool is used. Run `claude mcp list` to confirm it shows as connected.
+
+The [setup guide][docs-setup] covers the Claude app, Cursor, Devin, Zed, VS Code, GitHub Copilot CLI, Gemini CLI, and OpenAI Codex. To authenticate with an [MCP token][appsignal-mcp-token] instead of OAuth, add an `Authorization: Bearer <YOUR_MCP_TOKEN>` header. The setup guide shows the exact form for each editor.
+
+## What you can access
+
+The endpoint exposes read and write tools across seven areas: error incidents, performance, anomaly detection, logging, metrics, dashboards, and app discovery. With an MCP token, you can set each area to `read`, `write`, or disabled. With OAuth, AppSignal exposes all read and write tools at once.
+
+For the full list of tools, parameters, and example prompts, see the [MCP tool reference][docs-reference].
+
+## Legacy stdio proxy
+
+The Docker image and npm package in this repository wrap the HTTP endpoint in a stdio transport. Use them only for agents that cannot speak HTTP MCP, or in environments that restrict outbound traffic.
+
+This path is obsolete and we do not recommend it. It keeps working, but all new work goes into the HTTP endpoint.
+
+The proxy authenticates with an [MCP token][appsignal-mcp-token], so it exposes the toolsets that token allows. A token created before a tool shipped does not include that tool unless you set the token to expose new tools automatically. Connect to `https://appsignal.com/api/mcp` over OAuth for all read and write tools, or see [Missing any tools?][docs-missing-tools].
+
+### Requirements
 
 - Docker
-- An [AppSignal account][appsignal-sign-up] and an [AppSignal MCP token][appsignal-mcp-token].
+- An [AppSignal account][appsignal-sign-up] and an [AppSignal MCP token][appsignal-mcp-token]
 
-## Installation
+### Run the proxy
 
 Pull the Docker image:
 
@@ -27,37 +57,13 @@ docker pull appsignal/mcp:latest
 
 The image reads two environment variables: `APPSIGNAL_API_KEY` (required, your MCP token) and `APPSIGNAL_ENDPOINT` (optional, defaults to `https://appsignal.com/api/mcp`).
 
-## Configuration
-
-Each editor below shows two options: the HTTP endpoint, which authenticates with OAuth, and the Docker image, which authenticates with your [MCP token][appsignal-mcp-token]. To use a token over HTTP instead of OAuth, add an `Authorization: Bearer <YOUR_MCP_TOKEN>` header — see the [setup guide][docs-setup] for the exact form per editor.
-
-### Claude Code
-
-```bash
-claude mcp add --transport http appsignal https://appsignal.com/api/mcp
-```
-
-Claude Code starts the browser sign-in the first time an AppSignal tool is used. Run `claude mcp list` to confirm it shows as connected.
-
-With Docker:
+In Claude Code:
 
 ```bash
 claude mcp add appsignal -e APPSIGNAL_API_KEY=your-mcp-token -- docker run -i --rm -e APPSIGNAL_API_KEY appsignal/mcp
 ```
 
-### Claude app
-
-Claude.ai, and the desktop and mobile apps, connect over OAuth as a custom connector. There's no Bearer token option here.
-
-1. Open **Settings**, then **Connectors**.
-2. Select **Browse**, search for `appsignal`, and open the AppSignal connector. If it isn't listed, select **Add custom connector** and enter `https://appsignal.com/api/mcp`.
-3. Select **Connect** and complete the AppSignal sign-in.
-
-To run the Docker proxy locally instead, open **Settings → Developer → Local MCP servers** and select **Edit Config**.
-
-<img width="1416" height="546" alt="image" src="https://github.com/user-attachments/assets/d38e0b19-01b2-4b1d-82ba-e2ec1f8fde6f" />
-
-Then add this configuration to the file that opens:
+For other agents, register the same `docker run` command as a stdio MCP server. Most agents use this shape, but check your agent's own MCP documentation for its exact schema:
 
 ```json
 {
@@ -72,100 +78,12 @@ Then add this configuration to the file that opens:
   }
 }
 ```
-
-### Cursor and Windsurf
-
-To enable AppSignal MCP in Cursor or Windsurf, edit your configuration file.
-
-For Cursor use `~/.cursor/mcp.json`
-
-For Windsurf use `~/.codeium/windsurf/mcp_config.json`
-
-Add the following configuration:
-
-```json
-{
-  "mcpServers": {
-    "appsignal": {
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "-e", "APPSIGNAL_API_KEY", "appsignal/mcp"],
-      "env": {
-        "APPSIGNAL_API_KEY": "your-mcp-token"
-      }
-    }
-  }
-}
-```
-
-### Zed
-
-Open your Zed settings file and add the `context_servers` section:
-
-```json
-{
-  "context_servers": {
-    "appsignal": {
-      "source": "custom",
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "-e", "APPSIGNAL_API_KEY", "appsignal/mcp"],
-      "env": {
-        "APPSIGNAL_API_KEY": "your-mcp-token"
-      }
-    }
-  }
-}
-```
-
-### VS Code
-
-If you use GitHub Copilot under a company account, set **MCP servers in Copilot** to **Enabled** in your organization settings (Settings → Copilot → Policies → Features).
-
-![GitHub Copilot settings](public/assets/images/github-copilot-settings.png)
-
-Then add this config to your `.vscode/mcp.json` settings:
-
-```json
-{
-  "inputs": [
-    {
-      "type": "promptString",
-      "id": "appsignal_mcp_token",
-      "description": "AppSignal MCP Token",
-      "password": true
-    }
-  ],
-  "servers": {
-    "appsignal": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "APPSIGNAL_API_KEY",
-        "appsignal/mcp"
-      ],
-      "env": {
-        "APPSIGNAL_API_KEY": "${input:appsignal_mcp_token}"
-      }
-    }
-  }
-}
-```
-
-### Other agents
-
-GitHub Copilot CLI, Gemini CLI, and OpenAI Codex are covered in the [setup guide][docs-setup].
-
-## What you can access
-
-The endpoint exposes read and write tools across seven areas: error incidents, performance, anomaly detection, logging, metrics, dashboards, and app discovery. With an MCP token, each area can be set to `read`, `write`, or disabled. With OAuth, all read and write tools are exposed at once.
-
-For the full list of tools, parameters, and example prompts, see the [MCP tool reference][docs-reference].
 
 ## Development
 
-To work on the MCP server:
+This repository contains the stdio proxy only. The tools themselves live in the AppSignal application, so new tools and endpoints reach the proxy without a change here.
+
+To work on the proxy:
 
 1. Start the TypeScript compiler in watch mode:
 
@@ -233,6 +151,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 [mcp]: https://modelcontextprotocol.io/introduction
 [docs-setup]: https://docs.appsignal.com/mcp/setup
 [docs-reference]: https://docs.appsignal.com/mcp/reference
+[docs-missing-tools]: https://docs.appsignal.com/mcp/usage#missing-any-tools
 [appsignal]: https://www.appsignal.com
 [appsignal-sign-up]: https://appsignal.com/users/sign_up
 [appsignal-mcp-token]: https://appsignal.com/users/mcp_tokens
